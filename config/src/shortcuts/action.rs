@@ -197,7 +197,7 @@ pub enum System {
     BrightnessUp,
     /// Opens the calculator
     Calculator,
-    /// Toggles the chat panel
+    /// Opens Chord (the name is kept for the configs that already bind it)
     ChatPanel,
     /// Toggles display mode
     DisplayToggle,
