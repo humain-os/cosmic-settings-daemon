@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/playtron-os/cosmic-settings-daemon/compare/v1.11.0...v1.11.1) (2026-11-09)
+
+
+### Bug Fixes
+
+* **shortcuts:** open Chord instead of the removed chat panel ([6f25d1a](https://github.com/playtron-os/cosmic-settings-daemon/commit/6f25d1a5fef68bc84487157d1cf9f18f1cb18556))
+
 # [1.11.0](https://github.com/playtron-os/cosmic-settings-daemon/compare/v1.10.0...v1.11.0) (2026-10-23)
 
 
