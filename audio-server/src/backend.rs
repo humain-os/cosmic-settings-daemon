@@ -939,9 +939,12 @@ impl Model {
                                 node.object_id,
                                 node.node_name
                             );
+                            // A Bluetooth profile switch rebuilds the default under the same
+                            // name, and PipeWire announces no new default for it.
+                            let rebuilt = self.active_sink_node != Some(node.object_id);
                             self.set_default_sink_id(node.object_id);
-                            if self.active_sink_not_found {
-                                tracing::warn!(target: "audio-backend", node_id = node.object_id, node_name = node.node_name, "missing default sink node ID found");
+                            if self.active_sink_not_found || rebuilt {
+                                tracing::info!(target: "audio-backend", node_id = node.object_id, node_name = node.node_name, "default sink node ID found");
                                 self.emit_event(Event::DefaultSink(node.object_id)).await;
                                 self.active_sink_not_found = false;
                             }
@@ -959,9 +962,10 @@ impl Model {
                                 node.object_id,
                                 node.node_name
                             );
+                            let rebuilt = self.active_source_node != Some(node.object_id);
                             self.set_default_source_id(node.object_id);
-                            if self.active_source_not_found {
-                                tracing::warn!(target: "audio-backend", node_id = node.object_id, node_name = node.node_name, "missing default source node ID found");
+                            if self.active_source_not_found || rebuilt {
+                                tracing::info!(target: "audio-backend", node_id = node.object_id, node_name = node.node_name, "default source node ID found");
                                 self.emit_event(Event::DefaultSource(node.object_id)).await;
                                 self.active_source_not_found = false;
                             }
@@ -1251,5 +1255,103 @@ pub fn pipewire_route_to_cosmic(
             Availability::Unknown => cosmic_settings_audio_core::Availability::Unknown,
         },
         is_sink: matches!(route.direction, Direction::Output),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn sink(object_id: u32, node_name: &str) -> pipewire::Node {
+        pipewire::Node {
+            object_id,
+            audio_channels: 2,
+            audio_position: String::new(),
+            card_profile_device: Some(1),
+            description: String::new(),
+            device_id: Some(7),
+            device_profile_description: String::new(),
+            device_profile_pro: false,
+            icon_name: String::new(),
+            media_class: pipewire::MediaClass::Sink,
+            node_name: node_name.to_owned(),
+            state: pipewire::node::State::Running,
+        }
+    }
+
+    /// Feeds `events` to a model with one subscriber, and returns the default
+    /// sinks that subscriber is told about.
+    async fn announced_defaults(events: Vec<pipewire::Event>) -> Vec<NodeId> {
+        let mut model = Model::new().await;
+        let (tx, rx) = pipe::pipe().unwrap();
+        model.subscribers.lock().await.push(tx);
+        for event in events {
+            model.pipewire_update(event).await;
+        }
+
+        let mut bytes = Vec::new();
+        let mut buf = [0u8; 4096];
+        while let Ok(n) = rx.try_read(&mut buf) {
+            if n == 0 {
+                break;
+            }
+            bytes.extend_from_slice(&buf[..n]);
+        }
+        let mut defaults = Vec::new();
+        let mut rest = bytes.as_slice();
+        while rest.len() >= 4 {
+            let len = u32::from_le_bytes(rest[..4].try_into().unwrap()) as usize;
+            let event: Event = ron::de::from_bytes(&rest[4..4 + len]).unwrap();
+            if let Event::DefaultSink(id) = event {
+                defaults.push(id);
+            }
+            rest = &rest[4 + len..];
+        }
+        defaults
+    }
+
+    fn run<F: Future>(f: F) -> F::Output {
+        let rt = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap();
+        tokio::task::LocalSet::new().block_on(&rt, f)
+    }
+
+    const HEADSET: &str = "bluez_output.88_92_CC_99_A1_28.1";
+
+    /// A Bluetooth profile switch rebuilds the default sink under the same name,
+    /// so PipeWire announces no new default. Clients still need the new node, or
+    /// they keep watching the old one and miss every volume change after it.
+    #[test]
+    fn rebuilt_default_sink_is_announced() {
+        let defaults = run(announced_defaults(vec![
+            pipewire::Event::AddNode(sink(40, HEADSET)),
+            pipewire::Event::DefaultSink(HEADSET.to_owned()),
+            pipewire::Event::AddNode(sink(41, HEADSET)),
+            pipewire::Event::RemoveNode(40),
+        ]));
+        assert_eq!(defaults, [40, 41]);
+    }
+
+    #[test]
+    fn default_sink_rebuilt_after_removal_is_announced() {
+        let defaults = run(announced_defaults(vec![
+            pipewire::Event::AddNode(sink(40, HEADSET)),
+            pipewire::Event::DefaultSink(HEADSET.to_owned()),
+            pipewire::Event::RemoveNode(40),
+            pipewire::Event::AddNode(sink(41, HEADSET)),
+        ]));
+        assert_eq!(defaults, [40, 41]);
+    }
+
+    /// The default named before its node exists is announced once, when it appears.
+    #[test]
+    fn default_sink_named_before_its_node_is_announced_once() {
+        let defaults = run(announced_defaults(vec![
+            pipewire::Event::DefaultSink(HEADSET.to_owned()),
+            pipewire::Event::AddNode(sink(40, HEADSET)),
+        ]));
+        assert_eq!(defaults, [40]);
     }
 }
