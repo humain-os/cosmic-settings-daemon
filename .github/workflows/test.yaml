@@ -21,10 +21,6 @@ jobs:
       - name: Install Task
         uses: go-task/setup-task@v1
       - uses: actions/checkout@v3
-      - uses: kora-desktop/ci-actions/git-auth@v1
-        with:
-          client-id: ${{ vars.CI_APP_CLIENT_ID }}
-          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - run: |
           task docker:run TARGET='test:all'
 
@@ -36,10 +32,6 @@ jobs:
       - name: Install Task
         uses: go-task/setup-task@v1
       - uses: actions/checkout@v3
-      - uses: kora-desktop/ci-actions/git-auth@v1
-        with:
-          client-id: ${{ vars.CI_APP_CLIENT_ID }}
-          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - run: |
           task docker:run TARGET=dist:all ARCH=x86_64 TARGET_ARCH=x86_64-unknown-linux-gnu
 
@@ -51,9 +43,5 @@ jobs:
       - name: Install Task
         uses: go-task/setup-task@v1
       - uses: actions/checkout@v3
-      - uses: kora-desktop/ci-actions/git-auth@v1
-        with:
-          client-id: ${{ vars.CI_APP_CLIENT_ID }}
-          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - run: |
           task docker:run TARGET=dist:all ARCH=aarch64 TARGET_ARCH=aarch64-unknown-linux-gnu

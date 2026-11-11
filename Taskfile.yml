@@ -429,7 +429,7 @@ tasks:
           echo "{{.SSH_KEY}}" > .cache/.ssh/id_ed25519
           chmod 600 .cache/.ssh/id_ed25519
         {{ else if eq .GIT_AUTH_CONFIG "" }}
-          find ~/.ssh -maxdepth 1 -type f -exec cp {} .cache/.ssh/ \;
+          [ ! -d ~/.ssh ] || find ~/.ssh -maxdepth 1 -type f -exec cp {} .cache/.ssh/ \;
         {{ end }}
       - |
         docker run --rm {{.PODMAN_OPTS}} \
