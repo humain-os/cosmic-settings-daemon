@@ -1,13 +1,13 @@
 {
     /// Opens the application library (AgentOS all-apps view)
-    AppLibrary: "agentos-launcher apps",
+    AppLibrary: "kora-launcher apps",
     /// Opens Chord, or brings its window forward. It is an app, so it starts in the
     /// active workspace the way the launcher starts apps, never on the machine.
     ChatPanel: "case \"$COSMIC_WORKSPACES\" in 1|true|yes|on) exec kora-launch -- gtk-launch one.playtron.Chord.desktop ;; *) exec gtk-launch one.playtron.Chord.desktop ;; esac",
     /// Opens the AgentOS Spotlight search overlay
-    Spotlight: "agentos-launcher spotlight",
+    Spotlight: "kora-launcher spotlight",
     /// Opens the AgentOS start menu
-    StartMenu: "agentos-panel start-menu",
+    StartMenu: "kora-panel start-menu",
     /// Decreases screen brightness
     BrightnessDown: "busctl --user call com.system76.CosmicSettingsDaemon /com/system76/CosmicSettingsDaemon com.system76.CosmicSettingsDaemon DecreaseDisplayBrightness",
     /// Increases screen brightness
@@ -45,7 +45,7 @@
     /// Takes a screenshot
     Screenshot: "cosmic-screenshot",
     /// Opens the system settings application
-    Settings: "agentos-settings",
+    Settings: "kora-settings",
     /// Suspend the system
     Suspend: "systemctl suspend",
     /// Toggles the screen reader
@@ -61,9 +61,9 @@
     /// Opens the system default web browser
     WebBrowser: "xdg-open http://",
     /// Opens the (alt+tab) window switcher (AgentOS)
-    WindowSwitcher: "agentos-launcher alt-tab",
+    WindowSwitcher: "kora-launcher alt-tab",
     /// Opens the (alt+shift+tab) window switcher (AgentOS)
-    WindowSwitcherPrevious: "agentos-launcher shift-alt-tab",
+    WindowSwitcherPrevious: "kora-launcher shift-alt-tab",
     /// Opens the workspace overview
     WorkspaceOverview: "cosmic-workspaces",
 }
