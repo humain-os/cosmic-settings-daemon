@@ -1,3 +1,11 @@
+## [1.11.2](https://github.com/kora-desktop/cosmic-settings-daemon/compare/v1.11.1...v1.11.2) (2026-11-11)
+
+
+### Bug Fixes
+
+* **audio:** announce a default sink rebuilt under the same name ([b2c5ced](https://github.com/kora-desktop/cosmic-settings-daemon/commit/b2c5cedb167e1152e1b862ba43043fd42f1b9983))
+* **shortcuts:** launch kora-launcher, kora-panel and kora-settings ([22848d3](https://github.com/kora-desktop/cosmic-settings-daemon/commit/22848d3a90b33a75e37f8fb0011f74ceb58c55c5))
+
 ## [1.11.1](https://github.com/playtron-os/cosmic-settings-daemon/compare/v1.11.0...v1.11.1) (2026-11-09)
 
 

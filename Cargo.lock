@@ -1009,7 +1009,7 @@ dependencies = [
 
 [[package]]
 name = "cosmic-settings-daemon"
-version = "1.11.1"
+version = "1.11.2"
 dependencies = [
  "acpid_plug",
  "anyhow",
