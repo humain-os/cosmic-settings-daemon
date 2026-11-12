@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/kora-desktop/cosmic-settings-daemon/compare/v1.11.2...v1.11.3) (2026-11-12)
+
+
+### Bug Fixes
+
+* **appid:** move app ids to inc.kora ([21b0f9f](https://github.com/kora-desktop/cosmic-settings-daemon/commit/21b0f9f66662a4a767fd62cd6a1b25f2a627a01d))
+
 ## [1.11.2](https://github.com/kora-desktop/cosmic-settings-daemon/compare/v1.11.1...v1.11.2) (2026-11-11)
 
 
