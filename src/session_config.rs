@@ -35,6 +35,8 @@ pub const DOMAINS: &[&str] = &[
     "com.system76.CosmicTk",
     "com.system76.CosmicSettings.Shortcuts",
     "com.system76.CosmicSettings.WindowRules",
+    "inc.kora.VoiceMode",
+    // Until the compositor takes the new name; the user dir is moved on its first start.
     "com.playtron.VoiceMode",
 ];
 

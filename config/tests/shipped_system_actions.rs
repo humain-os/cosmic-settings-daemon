@@ -50,9 +50,9 @@ fn chat_panel_opens_chord_the_way_the_launcher_does() {
     // With workspaces it starts in the active one, as icetron's `AppStart` does from the machine.
     assert_eq!(
         run("1"),
-        "kora-launch -- gtk-launch one.playtron.Chord.desktop\n"
+        "kora-launch -- gtk-launch inc.kora.Chord.desktop\n"
     );
-    assert_eq!(run(""), "gtk-launch one.playtron.Chord.desktop\n");
+    assert_eq!(run(""), "gtk-launch inc.kora.Chord.desktop\n");
 
     fs::remove_dir_all(&root).unwrap();
 }

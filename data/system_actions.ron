@@ -3,7 +3,7 @@
     AppLibrary: "kora-launcher apps",
     /// Opens Chord, or brings its window forward. It is an app, so it starts in the
     /// active workspace the way the launcher starts apps, never on the machine.
-    ChatPanel: "case \"$COSMIC_WORKSPACES\" in 1|true|yes|on) exec kora-launch -- gtk-launch one.playtron.Chord.desktop ;; *) exec gtk-launch one.playtron.Chord.desktop ;; esac",
+    ChatPanel: "case \"$COSMIC_WORKSPACES\" in 1|true|yes|on) exec kora-launch -- gtk-launch inc.kora.Chord.desktop ;; *) exec gtk-launch inc.kora.Chord.desktop ;; esac",
     /// Opens the AgentOS Spotlight search overlay
     Spotlight: "kora-launcher spotlight",
     /// Opens the AgentOS start menu
